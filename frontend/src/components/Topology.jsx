@@ -201,7 +201,7 @@ function Topology() {
       </div>
 
       <div className="panel">
-        <h3 style={{ marginBottom: '16px' }}>🎯 Design Patterns Demonstrated</h3>
+        <h3 style={{ marginBottom: '16px' }}>Design Patterns Demonstrated</h3>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
           <div className="item">
             <div className="item-title">Service Orchestration</div>
