@@ -1,0 +1,51 @@
+# Git
+.git/
+.gitignore
+
+# Docker
+.dockerignore
+**/Dockerfile
+**/docker-compose.yml
+
+# Environment
+**/.env
+**/.env.local
+**/.env.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Service-specific
+
+# Go
+user-service/vendor/
+
+# Python
+product-service/__pycache__/
+product-service/*.pyc
+product-service/.pytest_cache/
+product-service/venv/
+
+# Java
+order-service/target/
+order-service/.mvn/
+
+# Node.js
+notification-service/node_modules/
+notification-service/npm-debug.log*
+
+# Rust
+analytics-service/target/
+analytics-service/Cargo.lock

@@ -1,0 +1,27 @@
+# Microservices Platform
+
+# Environment files
+.env
+.env.local
+
+# Git
+.git/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+
+# Build artifacts
+**/target/
+**/node_modules/
+**/__pycache__/
+**/vendor/
+
+# Logs
+*.log
