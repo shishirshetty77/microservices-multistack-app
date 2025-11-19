@@ -9,6 +9,7 @@ import (
 	"syscall"
 	"time"
 	"user-service/internal/config"
+	"user-service/internal/db"
 	"user-service/internal/handlers"
 	"user-service/internal/logger"
 
@@ -26,11 +27,26 @@ func main() {
 		"service": cfg.ServiceName,
 	})
 
+	// Initialize database
+	database, err := db.New(
+		getEnv("DB_HOST", "postgres"),
+		getEnv("DB_PORT", "5432"),
+		getEnv("DB_USER", "microservices"),
+		getEnv("DB_PASSWORD", "microservices123"),
+		getEnv("DB_NAME", "microservices"),
+		log,
+	)
+	if err != nil {
+		log.Error("Failed to connect to database", err, nil)
+		os.Exit(1)
+	}
+	defer database.Close()
+
 	// Initialize router
 	router := mux.NewRouter()
 
 	// Initialize handlers
-	userHandler := handlers.NewUserHandler(log)
+	userHandler := handlers.NewUserHandler(database, log)
 
 	// API routes
 	api := router.PathPrefix("/api").Subrouter()
@@ -80,6 +96,14 @@ func main() {
 	}
 
 	log.Info("Server exited", nil)
+}
+
+func getEnv(key, defaultValue string) string {
+	value := os.Getenv(key)
+	if value == "" {
+		return defaultValue
+	}
+	return value
 }
 
 func corsMiddleware(next http.Handler) http.Handler {
