@@ -1,6 +1,26 @@
 version: '3.8'
 
 services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres-db
+    environment:
+      - POSTGRES_USER=microservices
+      - POSTGRES_PASSWORD=microservices123
+      - POSTGRES_DB=microservices
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - microservices-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U microservices"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   user-service:
     build:
       context: ./user-service
@@ -12,8 +32,16 @@ services:
       - PORT=8001
       - SERVICE_NAME=user-service
       - LOG_LEVEL=info
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=microservices
+      - DB_PASSWORD=microservices123
+      - DB_NAME=microservices
     networks:
       - microservices-network
+    depends_on:
+      postgres:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8001/health"]
       interval: 30s
@@ -33,10 +61,18 @@ services:
       - SERVICE_NAME=product-service
       - LOG_LEVEL=info
       - USER_SERVICE_URL=http://user-service:8001
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=microservices
+      - DB_PASSWORD=microservices123
+      - DB_NAME=microservices
     networks:
       - microservices-network
     depends_on:
-      - user-service
+      postgres:
+        condition: service_healthy
+      user-service:
+        condition: service_started
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8002/health"]
       interval: 30s
@@ -58,12 +94,22 @@ services:
       - USER_SERVICE_URL=http://user-service:8001
       - PRODUCT_SERVICE_URL=http://product-service:8002
       - NOTIFICATION_SERVICE_URL=http://notification-service:8004
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=microservices
+      - DB_PASSWORD=microservices123
+      - DB_NAME=microservices
     networks:
       - microservices-network
     depends_on:
-      - user-service
-      - product-service
-      - notification-service
+      postgres:
+        condition: service_healthy
+      user-service:
+        condition: service_started
+      product-service:
+        condition: service_started
+      notification-service:
+        condition: service_started
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8003/health"]
       interval: 30s
@@ -82,8 +128,16 @@ services:
       - PORT=8004
       - SERVICE_NAME=notification-service
       - LOG_LEVEL=info
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=microservices
+      - DB_PASSWORD=microservices123
+      - DB_NAME=microservices
     networks:
       - microservices-network
+    depends_on:
+      postgres:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8004/health"]
       interval: 30s
@@ -120,6 +174,31 @@ services:
       retries: 3
       start_period: 60s
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    networks:
+      - microservices-network
+    depends_on:
+      - user-service
+      - product-service
+      - order-service
+      - notification-service
+      - analytics-service
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
 networks:
   microservices-network:
     driver: bridge
+
+volumes:
+  postgres-data:
