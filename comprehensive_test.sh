@@ -243,7 +243,7 @@ HTTP_CODE=$(echo "$RESPONSE" | grep "HTTP_STATUS" | cut -d: -f2)
 echo "Test 4.5: Create Second Order"
 RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X POST http://localhost:8003/api/orders \
   -H "Content-Type: application/json" \
-  -d '{"userId": "2", "productId": "2", "quantity": 3}')
+  -d '{"userId": "4", "productId": "2", "quantity": 3}')
 echo "$RESPONSE"
 HTTP_CODE=$(echo "$RESPONSE" | grep "HTTP_STATUS" | cut -d: -f2)
 [ "$HTTP_CODE" = "201" ] && test_result 0 "Create second order" || test_result 1 "Create second order (Expected 201, got $HTTP_CODE)"
@@ -340,7 +340,7 @@ echo "=========================================="
 echo ""
 
 echo "Test 7.1: Delete Notification"
-RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X DELETE http://localhost:8004/api/notifications/1)
+RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X DELETE http://localhost:8004/api/notifications/2)
 echo "$RESPONSE"
 HTTP_CODE=$(echo "$RESPONSE" | grep "HTTP_STATUS" | cut -d: -f2)
 [ "$HTTP_CODE" = "200" ] && test_result 0 "Delete notification" || test_result 1 "Delete notification (Expected 200, got $HTTP_CODE)"
@@ -352,13 +352,13 @@ HTTP_CODE=$(echo "$RESPONSE" | grep "HTTP_STATUS" | cut -d: -f2)
 [ "$HTTP_CODE" = "200" ] && test_result 0 "Delete product" || test_result 1 "Delete product (Expected 200, got $HTTP_CODE)"
 
 echo "Test 7.3: Delete User"
-RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X DELETE http://localhost:8001/api/users/2)
+RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X DELETE http://localhost:8001/api/users/3)
 echo "$RESPONSE"
 HTTP_CODE=$(echo "$RESPONSE" | grep "HTTP_STATUS" | cut -d: -f2)
 [ "$HTTP_CODE" = "200" ] && test_result 0 "Delete user" || test_result 1 "Delete user (Expected 200, got $HTTP_CODE)"
 
 echo "Test 7.4: Verify Deleted User Not Found"
-RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" http://localhost:8001/api/users/2)
+RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" http://localhost:8001/api/users/3)
 echo "$RESPONSE"
 HTTP_CODE=$(echo "$RESPONSE" | grep "HTTP_STATUS" | cut -d: -f2)
 [ "$HTTP_CODE" = "404" ] && test_result 0 "Verify deleted user returns 404" || test_result 1 "Verify deleted user returns 404 (Expected 404, got $HTTP_CODE)"
