@@ -1,0 +1,13 @@
+# GCP Project Configuration
+project_id = "your-gcp-project-id"
+
+# Path to GCP service account JSON key file (optional if using gcloud auth)
+# credentials_file = "/path/to/your/service-account-key.json"
+
+# Region and Zone Configuration
+region = "asia-south1"
+zones  = ["asia-south1-a", "asia-south1-b", "asia-south1-c"]
+
+# VPC Configuration
+network_name   = "microservices-vpc"
+vpc_cidr_range = "10.0.0.0/20"
