@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: analytics-service
-        image: analytics-service:latest
+        image: shishir77/analytics-service:latest
         imagePullPolicy: IfNotPresent
         ports:
         - name: http

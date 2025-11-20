@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: user-service
-        image: user-service:latest
+        image: shishir77/user-service:latest
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
