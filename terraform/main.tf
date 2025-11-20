@@ -23,3 +23,20 @@ module "vpc" {
   network_name = var.network_name
   cidr_range   = var.vpc_cidr_range
 }
+
+module "gke" {
+  source = "./modules/gke"
+
+  project_id              = var.project_id
+  region                  = var.region
+  zones                   = var.zones
+  cluster_name            = var.cluster_name
+  network_name            = module.vpc.network_name
+  subnet_name             = module.vpc.subnet_name
+  pods_ip_range_name      = module.vpc.pods_ip_range_name
+  services_ip_range_name  = module.vpc.services_ip_range_name
+  node_count              = var.gke_node_count
+  machine_type            = var.gke_machine_type
+  disk_size_gb            = var.gke_disk_size_gb
+  disk_type               = var.gke_disk_type
+}
