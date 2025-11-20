@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: notification-service
-        image: shishir77/notification-service:latest
+        image: shishir77/notification-serviceatest:latest
         imagePullPolicy: IfNotPresent
         ports:
         - name: http

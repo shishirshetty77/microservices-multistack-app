@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: shishir77/frontend:latest
+        image: shishir77/frontendatest:latest
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
