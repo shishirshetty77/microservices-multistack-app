@@ -40,6 +40,11 @@ spec:
               secretKeyRef:
                 name: postgres-secret
                 key: POSTGRES_PASSWORD
+
+          # NEW PGDATA PATH (WORKS ON GKE)
+          - name: PGDATA
+            value: /var/lib/postgresql/data
+
         volumeMounts:
           - name: postgres-storage
             mountPath: /var/lib/postgresql/data
