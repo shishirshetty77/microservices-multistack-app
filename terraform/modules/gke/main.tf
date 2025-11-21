@@ -2,7 +2,7 @@ resource "google_container_cluster" "primary" {
   name     = var.cluster_name
   location = var.zones[0]  # ZONAL cluster for free tier (not regional)
   project  = var.project_id
-
+  deletion_protection = false
   # Zonal cluster - no need for node_locations (it's already in the zone)
   # node_locations = []  # Not needed for zonal clusters
 
@@ -86,13 +86,13 @@ resource "google_container_node_pool" "primary_nodes" {
   # No node_locations needed for zonal cluster
   # node_locations = []
   
-  # Minimal node count for free tier
+  # Initial node count
   node_count = var.node_count
 
-  # Autoscaling disabled for free tier
+  # Enable autoscaling for production workload
   autoscaling {
-    min_node_count = var.node_count
-    max_node_count = var.node_count
+    min_node_count = var.min_node_count
+    max_node_count = var.max_node_count
   }
 
   # Node configuration
@@ -134,8 +134,8 @@ resource "google_container_node_pool" "primary_nodes" {
     # Tags
     tags = ["gke-node", "${var.cluster_name}-node"]
 
-    # Preemptible nodes for cost savings (optional)
-    preemptible  = true
+    # Use preemptible nodes for cost savings (80% cheaper)
+    preemptible  = var.preemptible
     spot         = false
   }
 

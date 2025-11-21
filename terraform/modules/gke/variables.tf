@@ -39,27 +39,45 @@ variable "services_ip_range_name" {
 }
 
 variable "node_count" {
-  description = "Number of nodes per zone"
+  description = "Initial number of nodes in the node pool"
   type        = number
-  default     = 1
+  default     = 2
+}
+
+variable "min_node_count" {
+  description = "Minimum number of nodes for autoscaling"
+  type        = number
+  default     = 2
+}
+
+variable "max_node_count" {
+  description = "Maximum number of nodes for autoscaling"
+  type        = number
+  default     = 4
 }
 
 variable "machine_type" {
   description = "Machine type for nodes"
   type        = string
-  default     = "e2-micro"
+  default     = "e2-standard-2"
 }
 
 variable "disk_size_gb" {
   description = "Disk size in GB for nodes"
   type        = number
-  default     = 10
+  default     = 30
 }
 
 variable "disk_type" {
   description = "Disk type for nodes"
   type        = string
   default     = "pd-standard"
+}
+
+variable "preemptible" {
+  description = "Use preemptible nodes for cost savings"
+  type        = bool
+  default     = true
 }
 
 variable "enable_autopilot" {

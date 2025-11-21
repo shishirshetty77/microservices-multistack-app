@@ -36,7 +36,10 @@ module "gke" {
   pods_ip_range_name      = module.vpc.pods_ip_range_name
   services_ip_range_name  = module.vpc.services_ip_range_name
   node_count              = var.gke_node_count
+  min_node_count          = var.gke_min_node_count
+  max_node_count          = var.gke_max_node_count
   machine_type            = var.gke_machine_type
   disk_size_gb            = var.gke_disk_size_gb
   disk_type               = var.gke_disk_type
+  preemptible             = var.gke_preemptible
 }
