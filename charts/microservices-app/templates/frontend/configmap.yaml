@@ -1,0 +1,18 @@
+{{- if .Values.frontend.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+  labels:
+    app: frontend
+data:
+  PORT: {{ .Values.frontend.port | quote }}
+  REACT_APP_API_URL: "http://localhost:80" # This might need to be adjusted for real ingress
+  # In a real scenario, you'd pass the public URLs of the services or the ingress URL
+  # For now, we keep it as is or point to the services if using Nginx proxy in frontend
+  VITE_USER_SERVICE_URL: "http://user-service:{{ .Values.userService.port }}"
+  VITE_PRODUCT_SERVICE_URL: "http://product-service:{{ .Values.productService.port }}"
+  VITE_ORDER_SERVICE_URL: "http://order-service:{{ .Values.orderService.port }}"
+  VITE_NOTIFICATION_SERVICE_URL: "http://notification-service:{{ .Values.notificationService.port }}"
+  VITE_ANALYTICS_SERVICE_URL: "http://analytics-service:{{ .Values.analyticsService.port }}"
+{{- end }}
