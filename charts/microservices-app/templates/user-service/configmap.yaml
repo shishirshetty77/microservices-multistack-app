@@ -1,0 +1,15 @@
+{{- if .Values.userService.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-service-config
+  labels:
+    app: user-service
+data:
+  PORT: {{ .Values.userService.port | quote }}
+  SERVICE_NAME: "user-service"
+  LOG_LEVEL: "info"
+  DB_HOST: "postgres-service"
+  DB_PORT: "5432"
+  DB_NAME: {{ .Values.postgres.dbName | quote }}
+{{- end }}

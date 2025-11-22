@@ -1,0 +1,18 @@
+{{- if .Values.orderService.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-service
+  labels:
+    app: order-service
+spec:
+  type: ClusterIP
+  selector:
+    app: order-service
+  ports:
+    - name: http
+      protocol: TCP
+      port: {{ .Values.orderService.port }}
+      targetPort: {{ .Values.orderService.port }}
+  sessionAffinity: None
+{{- end }}
