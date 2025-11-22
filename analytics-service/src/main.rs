@@ -1,8 +1,6 @@
-use actix_web::{web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{web, App, HttpServer};
 use actix_cors::Cors;
-use serde::{Deserialize, Serialize};
-use std::env;
-use log::{info, error};
+use log::info;
 use env_logger::Env;
 
 mod handlers;
