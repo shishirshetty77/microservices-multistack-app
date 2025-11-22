@@ -1,0 +1,16 @@
+{{- if .Values.analyticsService.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: analytics-service-config
+  labels:
+    app: analytics-service
+data:
+  PORT: {{ .Values.analyticsService.port | quote }}
+  SERVICE_NAME: "analytics-service"
+  LOG_LEVEL: "info"
+  USER_SERVICE_URL: "http://user-service:{{ .Values.userService.port }}"
+  PRODUCT_SERVICE_URL: "http://product-service:{{ .Values.productService.port }}"
+  ORDER_SERVICE_URL: "http://order-service:{{ .Values.orderService.port }}"
+  NOTIFICATION_SERVICE_URL: "http://notification-service:{{ .Values.notificationService.port }}"
+{{- end }}

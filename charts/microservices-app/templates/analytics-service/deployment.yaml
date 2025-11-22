@@ -1,0 +1,54 @@
+{{- if .Values.analyticsService.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analytics-service
+  labels:
+    app: analytics-service
+    version: v1
+spec:
+  replicas: {{ .Values.analyticsService.replicas }}
+  selector:
+    matchLabels:
+      app: analytics-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: analytics-service
+        version: v1
+    spec:
+      containers:
+      - name: analytics-service
+        image: {{ .Values.analyticsService.image }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.analyticsService.port }}
+          protocol: TCP
+        envFrom:
+          - configMapRef:
+              name: analytics-service-config
+        resources:
+{{ toYaml .Values.analyticsService.resources | indent 10 }}
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.analyticsService.port }}
+          initialDelaySeconds: 40
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.analyticsService.port }}
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+{{- end }}

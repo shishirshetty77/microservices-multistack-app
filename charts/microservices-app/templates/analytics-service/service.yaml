@@ -1,0 +1,18 @@
+{{- if .Values.analyticsService.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: analytics-service
+  labels:
+    app: analytics-service
+spec:
+  type: ClusterIP
+  selector:
+    app: analytics-service
+  ports:
+    - name: http
+      protocol: TCP
+      port: {{ .Values.analyticsService.port }}
+      targetPort: {{ .Values.analyticsService.port }}
+  sessionAffinity: None
+{{- end }}

@@ -1,0 +1,15 @@
+{{- if .Values.notificationService.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: notification-service-config
+  labels:
+    app: notification-service
+data:
+  PORT: {{ .Values.notificationService.port | quote }}
+  SERVICE_NAME: "notification-service"
+  LOG_LEVEL: "info"
+  DB_HOST: "postgres-service"
+  DB_PORT: "5432"
+  DB_NAME: {{ .Values.postgres.dbName | quote }}
+{{- end }}
