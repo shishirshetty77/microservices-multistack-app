@@ -1,0 +1,97 @@
+global:
+  imagePullPolicy: IfNotPresent
+
+postgres:
+  enabled: true
+  image: shishir77/postgres:latest
+  storage: 5Gi
+  storageClassName: standard-rwo
+  user: microservices
+  password: microservices123
+  dbName: microservices
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "200m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+
+userService:
+  enabled: true
+  image: shishir77/user-serviceatest:latest
+  replicas: 2
+  port: 8001
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "256Mi"
+      cpu: "200m"
+
+productService:
+  enabled: true
+  image: shishir77/product-serviceatest:latest
+  replicas: 2
+  port: 8002
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "256Mi"
+      cpu: "200m"
+
+orderService:
+  enabled: true
+  image: shishir77/order-serviceatest:latest
+  replicas: 2
+  port: 8003
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "200m"
+    limits:
+      memory: "512Mi"
+      cpu: "400m"
+
+notificationService:
+  enabled: true
+  image: shishir77/notification-serviceatest:latest
+  replicas: 2
+  port: 8004
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "256Mi"
+      cpu: "200m"
+
+analyticsService:
+  enabled: true
+  image: shishir77/analytics-serviceatest:latest
+  replicas: 2
+  port: 8005
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "256Mi"
+      cpu: "200m"
+
+frontend:
+  enabled: true
+  image: shishir77/frontendatest:latest
+  replicas: 2
+  port: 3000
+  serviceType: LoadBalancer
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "256Mi"
+      cpu: "200m"
