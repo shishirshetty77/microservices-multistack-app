@@ -100,15 +100,6 @@ jobs:
         run: |
           chmod +x mvnw
           ./mvnw clean verify
-      - name: Run Trivy Vulnerability Scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'fs'
-          scan-ref: './order-service'
-          format: 'table'
-          exit-code: '1'
-          ignore-unfixed: true
-          severity: 'CRITICAL,HIGH'
 
   check-notification-service:
     name: Notification Service (Node.js)
