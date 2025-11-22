@@ -5,6 +5,7 @@ metadata:
   name: frontend
   labels:
     app: frontend
+    monitor: "true"
 spec:
   type: {{ .Values.frontend.serviceType }}
   selector:

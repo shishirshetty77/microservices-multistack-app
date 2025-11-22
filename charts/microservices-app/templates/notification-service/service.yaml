@@ -5,6 +5,7 @@ metadata:
   name: notification-service
   labels:
     app: notification-service
+    monitor: "true"
 spec:
   type: ClusterIP
   selector:

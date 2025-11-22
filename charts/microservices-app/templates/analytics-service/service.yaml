@@ -5,6 +5,7 @@ metadata:
   name: analytics-service
   labels:
     app: analytics-service
+    monitor: "true"
 spec:
   type: ClusterIP
   selector:

@@ -5,6 +5,7 @@ metadata:
   name: user-service
   labels:
     app: user-service
+    monitor: "true"
 spec:
   type: ClusterIP
   selector:
