@@ -95,3 +95,45 @@ frontend:
     limits:
       memory: "256Mi"
       cpu: "200m"
+
+# Monitoring Configuration (kube-prometheus-stack)
+kube-prometheus-stack:
+  enabled: true
+  fullnameOverride: "monitoring"
+  
+  # Prometheus Configuration
+  prometheus:
+    prometheusSpec:
+      serviceMonitorSelectorNilUsesHelmValues: false
+      serviceMonitorSelector: {}
+      serviceMonitorNamespaceSelector: {}
+      retention: 10d
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: standard-rwo
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 10Gi
+
+  # Grafana Configuration
+  grafana:
+    enabled: true
+    adminPassword: "admin"
+    persistence:
+      enabled: true
+      storageClassName: standard-rwo
+      size: 5Gi
+    service:
+      type: LoadBalancer
+      port: 80
+
+  # Disable components we might not need immediately to save resources
+  alertmanager:
+    enabled: false
+
+# Custom Monitoring Settings
+monitoring:
+  serviceMonitor:
+    enabled: true
