@@ -3,20 +3,26 @@ name: CI/CD Pipeline
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+      - 'helm/**'
+      - 'k8s/**'
+      - 'README.md'
   pull_request:
     branches: [ main ]
+    paths-ignore:
+      - 'helm/**'
+      - 'k8s/**'
+      - 'README.md'
 
 env:
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
   DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
   # Replace with your actual Docker Hub username if hardcoding is preferred, 
-  # but using secrets is best practice.
+  # but using secrets is best practice. if you ask me use secrets
   IMAGE_OWNER: shishir77 
 
 jobs:
-  # ==================================================================================
-  # 1. QUALITY CHECKS & TESTING
-  # ==================================================================================
+  
   
   check-user-service:
     name: User Service (Go)
@@ -36,6 +42,15 @@ jobs:
       - name: Run Tests
         working-directory: ./user-service
         run: go test -v ./...
+      - name: Run Trivy Vulnerability Scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: './user-service'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
 
   check-product-service:
     name: Product Service (Python)
@@ -59,6 +74,15 @@ jobs:
         working-directory: ./product-service
         # Fail on errors only (E), ignore convention/refactor messages for now
         run: pylint --disable=C,R,W src/ || true 
+      - name: Run Trivy Vulnerability Scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: './product-service'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
 
   check-order-service:
     name: Order Service (Java)
@@ -74,6 +98,15 @@ jobs:
       - name: Build and Test
         working-directory: ./order-service
         run: ./mvnw clean verify
+      - name: Run Trivy Vulnerability Scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: './order-service'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
 
   check-notification-service:
     name: Notification Service (Node.js)
@@ -93,6 +126,15 @@ jobs:
         working-directory: ./notification-service
         # Using npx to run eslint without modifying package.json
         run: npx eslint src/ || true
+      - name: Run Trivy Vulnerability Scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: './notification-service'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
 
   check-analytics-service:
     name: Analytics Service (Rust)
@@ -111,6 +153,15 @@ jobs:
       - name: Run Tests
         working-directory: ./analytics-service
         run: cargo test
+      - name: Run Trivy Vulnerability Scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: './analytics-service'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
 
   check-frontend:
     name: Frontend (React)
@@ -129,10 +180,16 @@ jobs:
       - name: Build Check
         working-directory: ./frontend
         run: npm run build
-
-  # ==================================================================================
-  # 2. BUILD & PUSH DOCKER IMAGES
-  # ==================================================================================
+      - name: Run Trivy Vulnerability Scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: './frontend'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+  
   
   build-and-push:
     needs: 
