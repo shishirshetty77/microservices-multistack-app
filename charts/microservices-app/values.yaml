@@ -1,6 +1,5 @@
 global:
   imagePullPolicy: IfNotPresent
-
 postgres:
   enabled: true
   image: shishir77/postgres:latest
@@ -16,10 +15,9 @@ postgres:
     limits:
       memory: "512Mi"
       cpu: "500m"
-
 userService:
   enabled: true
-  image: shishir77/user-serviceatest:latest
+  image: shishir77/user-service:c67d70f590a017e74caaa3accb285397c4d1e18e
   replicas: 2
   port: 8001
   resources:
@@ -29,10 +27,9 @@ userService:
     limits:
       memory: "256Mi"
       cpu: "200m"
-
 productService:
   enabled: true
-  image: shishir77/product-serviceatest:latest
+  image: shishir77/product-service:c67d70f590a017e74caaa3accb285397c4d1e18e
   replicas: 2
   port: 8002
   resources:
@@ -42,10 +39,9 @@ productService:
     limits:
       memory: "256Mi"
       cpu: "200m"
-
 orderService:
   enabled: true
-  image: shishir77/order-serviceatest:latest
+  image: shishir77/order-service:c67d70f590a017e74caaa3accb285397c4d1e18e
   replicas: 2
   port: 8003
   resources:
@@ -55,10 +51,9 @@ orderService:
     limits:
       memory: "512Mi"
       cpu: "400m"
-
 notificationService:
   enabled: true
-  image: shishir77/notification-serviceatest:latest
+  image: shishir77/notification-service:c67d70f590a017e74caaa3accb285397c4d1e18e
   replicas: 2
   port: 8004
   resources:
@@ -68,10 +63,9 @@ notificationService:
     limits:
       memory: "256Mi"
       cpu: "200m"
-
 analyticsService:
   enabled: true
-  image: shishir77/analytics-serviceatest:latest
+  image: shishir77/analytics-service:c67d70f590a017e74caaa3accb285397c4d1e18e
   replicas: 2
   port: 8005
   resources:
@@ -81,10 +75,9 @@ analyticsService:
     limits:
       memory: "256Mi"
       cpu: "200m"
-
 frontend:
   enabled: true
-  image: shishir77/frontendatest:latest
+  image: shishir77/frontend:c67d70f590a017e74caaa3accb285397c4d1e18e
   replicas: 2
   port: 3000
   serviceType: LoadBalancer
@@ -95,12 +88,10 @@ frontend:
     limits:
       memory: "256Mi"
       cpu: "200m"
-
 # Monitoring Configuration (kube-prometheus-stack)
 kube-prometheus-stack:
   enabled: true
   fullnameOverride: "monitoring"
-  
   # Prometheus Configuration
   prometheus:
     prometheusSpec:
@@ -116,7 +107,6 @@ kube-prometheus-stack:
             resources:
               requests:
                 storage: 10Gi
-
   # Grafana Configuration
   grafana:
     enabled: true
@@ -128,11 +118,9 @@ kube-prometheus-stack:
     service:
       type: LoadBalancer
       port: 80
-
   # Disable components we might not need immediately to save resources
   alertmanager:
     enabled: false
-
 # Custom Monitoring Settings
 monitoring:
   serviceMonitor:
