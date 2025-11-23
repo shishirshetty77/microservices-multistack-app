@@ -16,7 +16,7 @@ postgres:
       memory: "512Mi"
 userService:
   enabled: true
-  image: shishir77/user-service:cce68ebf10d16414bd3effb7ad7d65fc0b4c5739
+  image: shishir77/user-service:b87d93bb1bbef8a4b826957dd22f68a30c988e1e
   replicas: 2
   port: 8001
   resources:
@@ -27,7 +27,7 @@ userService:
       memory: "256Mi"
 productService:
   enabled: true
-  image: shishir77/product-service:cce68ebf10d16414bd3effb7ad7d65fc0b4c5739
+  image: shishir77/product-service:b87d93bb1bbef8a4b826957dd22f68a30c988e1e
   replicas: 2
   port: 8002
   resources:
@@ -38,7 +38,7 @@ productService:
       memory: "256Mi"
 orderService:
   enabled: true
-  image: shishir77/order-service:cce68ebf10d16414bd3effb7ad7d65fc0b4c5739
+  image: shishir77/order-service:b87d93bb1bbef8a4b826957dd22f68a30c988e1e
   replicas: 2
   port: 8003
   resources:
@@ -49,7 +49,7 @@ orderService:
       memory: "512Mi"
 notificationService:
   enabled: true
-  image: shishir77/notification-service:cce68ebf10d16414bd3effb7ad7d65fc0b4c5739
+  image: shishir77/notification-service:b87d93bb1bbef8a4b826957dd22f68a30c988e1e
   replicas: 2
   port: 8004
   resources:
@@ -60,7 +60,7 @@ notificationService:
       memory: "256Mi"
 analyticsService:
   enabled: true
-  image: shishir77/analytics-service:cce68ebf10d16414bd3effb7ad7d65fc0b4c5739
+  image: shishir77/analytics-service:b87d93bb1bbef8a4b826957dd22f68a30c988e1e
   replicas: 2
   port: 8005
   resources:
@@ -71,7 +71,7 @@ analyticsService:
       memory: "256Mi"
 frontend:
   enabled: true
-  image: shishir77/frontend:cce68ebf10d16414bd3effb7ad7d65fc0b4c5739
+  image: shishir77/frontend:b87d93bb1bbef8a4b826957dd22f68a30c988e1e
   replicas: 3
   port: 3000
   serviceType: LoadBalancer
