@@ -14,7 +14,6 @@ postgres:
       cpu: "200m"
     limits:
       memory: "512Mi"
-      cpu: "500m"
 userService:
   enabled: true
   image: shishir77/user-service:80aba2fb5ecf2ea1b4956b75b609e288fb54f833
@@ -26,7 +25,6 @@ userService:
       cpu: "100m"
     limits:
       memory: "256Mi"
-      cpu: "200m"
 productService:
   enabled: true
   image: shishir77/product-service:80aba2fb5ecf2ea1b4956b75b609e288fb54f833
@@ -38,7 +36,6 @@ productService:
       cpu: "100m"
     limits:
       memory: "256Mi"
-      cpu: "200m"
 orderService:
   enabled: true
   image: shishir77/order-service:80aba2fb5ecf2ea1b4956b75b609e288fb54f833
@@ -50,7 +47,6 @@ orderService:
       cpu: "200m"
     limits:
       memory: "512Mi"
-      cpu: "400m"
 notificationService:
   enabled: true
   image: shishir77/notification-service:80aba2fb5ecf2ea1b4956b75b609e288fb54f833
@@ -62,7 +58,6 @@ notificationService:
       cpu: "100m"
     limits:
       memory: "256Mi"
-      cpu: "200m"
 analyticsService:
   enabled: true
   image: shishir77/analytics-service:80aba2fb5ecf2ea1b4956b75b609e288fb54f833
@@ -74,7 +69,6 @@ analyticsService:
       cpu: "100m"
     limits:
       memory: "256Mi"
-      cpu: "200m"
 frontend:
   enabled: true
   image: shishir77/frontend:80aba2fb5ecf2ea1b4956b75b609e288fb54f833
@@ -87,7 +81,6 @@ frontend:
       cpu: "100m"
     limits:
       memory: "256Mi"
-      cpu: "200m"
 # Monitoring Configuration (kube-prometheus-stack)
 kube-prometheus-stack:
   enabled: true
