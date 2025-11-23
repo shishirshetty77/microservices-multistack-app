@@ -17,7 +17,7 @@ postgres:
       cpu: "500m"
 userService:
   enabled: true
-  image: shishir77/user-service:c67d70f590a017e74caaa3accb285397c4d1e18e
+  image: shishir77/user-service:ce550f6ca271ed4407d8c759a9ae9532452fdcf5
   replicas: 2
   port: 8001
   resources:
@@ -29,7 +29,7 @@ userService:
       cpu: "200m"
 productService:
   enabled: true
-  image: shishir77/product-service:c67d70f590a017e74caaa3accb285397c4d1e18e
+  image: shishir77/product-service:ce550f6ca271ed4407d8c759a9ae9532452fdcf5
   replicas: 2
   port: 8002
   resources:
@@ -41,7 +41,7 @@ productService:
       cpu: "200m"
 orderService:
   enabled: true
-  image: shishir77/order-service:c67d70f590a017e74caaa3accb285397c4d1e18e
+  image: shishir77/order-service:ce550f6ca271ed4407d8c759a9ae9532452fdcf5
   replicas: 2
   port: 8003
   resources:
@@ -53,7 +53,7 @@ orderService:
       cpu: "400m"
 notificationService:
   enabled: true
-  image: shishir77/notification-service:c67d70f590a017e74caaa3accb285397c4d1e18e
+  image: shishir77/notification-service:ce550f6ca271ed4407d8c759a9ae9532452fdcf5
   replicas: 2
   port: 8004
   resources:
@@ -65,7 +65,7 @@ notificationService:
       cpu: "200m"
 analyticsService:
   enabled: true
-  image: shishir77/analytics-service:c67d70f590a017e74caaa3accb285397c4d1e18e
+  image: shishir77/analytics-service:ce550f6ca271ed4407d8c759a9ae9532452fdcf5
   replicas: 2
   port: 8005
   resources:
@@ -77,7 +77,7 @@ analyticsService:
       cpu: "200m"
 frontend:
   enabled: true
-  image: shishir77/frontend:c67d70f590a017e74caaa3accb285397c4d1e18e
+  image: shishir77/frontend:ce550f6ca271ed4407d8c759a9ae9532452fdcf5
   replicas: 3
   port: 3000
   serviceType: LoadBalancer
