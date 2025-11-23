@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { getAnalytics } from '../api';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
-const COLORS = ['#667eea', '#764ba2', '#f093fb', '#4facfe'];
+const COLORS = ['#003049', '#669bbc', '#c1121f', '#780000'];
 
 function Analytics() {
   const [analytics, setAnalytics] = useState(null);
@@ -11,11 +11,13 @@ function Analytics() {
 
   const fetchAnalytics = async () => {
     try {
-      setLoading(true);
+      // Don't set loading to true here to avoid flickering on updates
+      // setLoading(true); 
       const response = await getAnalytics();
       setAnalytics(response.data);
       setError(null);
     } catch (err) {
+      console.error('Analytics fetch error:', err);
       setError('Failed to fetch analytics: ' + err.message);
     } finally {
       setLoading(false);
@@ -23,7 +25,10 @@ function Analytics() {
   };
 
   useEffect(() => {
+    // Initial load
+    setLoading(true);
     fetchAnalytics();
+    
     const interval = setInterval(fetchAnalytics, 10000); // Update every 10 seconds
     return () => clearInterval(interval);
   }, []);
@@ -32,19 +37,24 @@ function Analytics() {
     return <div className="loading">Loading analytics...</div>;
   }
 
-  if (error) {
+  if (error && !analytics) {
     return <div className="error">{error}</div>;
   }
 
   const chartData = [
-    { name: 'Users', count: analytics?.total_users || 0, color: '#00ADD8' },
-    { name: 'Products', count: analytics?.total_products || 0, color: '#3776AB' },
-    { name: 'Orders', count: analytics?.total_orders || 0, color: '#007396' },
-    { name: 'Notifications', count: analytics?.total_notifications || 0, color: '#339933' },
+    { name: 'Users', count: analytics?.total_users || 0, color: '#003049' },
+    { name: 'Products', count: analytics?.total_products || 0, color: '#669bbc' },
+    { name: 'Orders', count: analytics?.total_orders || 0, color: '#c1121f' },
+    { name: 'Notifications', count: analytics?.total_notifications || 0, color: '#780000' },
   ];
 
   return (
     <div>
+      {error && (
+        <div style={{ backgroundColor: '#ffebee', color: '#c62828', padding: '10px', borderRadius: '4px', marginBottom: '16px' }}>
+          Warning: Connection lost. Showing cached data. ({error})
+        </div>
+      )}
       <div className="panel">
         <div className="panel-header">
           <h2 className="panel-title">System Analytics</h2>
@@ -61,19 +71,19 @@ function Analytics() {
         </div>
 
         <div className="stats-grid">
-          <div className="stat-card" style={{ background: 'linear-gradient(135deg, #00ADD8 0%, #0088a8 100%)' }}>
+          <div className="stat-card" style={{ background: 'linear-gradient(135deg, #003049 0%, #003049 100%)' }}>
             <div className="stat-value">{analytics?.total_users || 0}</div>
             <div className="stat-label">Total Users</div>
           </div>
-          <div className="stat-card" style={{ background: 'linear-gradient(135deg, #3776AB 0%, #285d8b 100%)' }}>
+          <div className="stat-card" style={{ background: 'linear-gradient(135deg, #669bbc 0%, #669bbc 100%)' }}>
             <div className="stat-value">{analytics?.total_products || 0}</div>
             <div className="stat-label">Total Products</div>
           </div>
-          <div className="stat-card" style={{ background: 'linear-gradient(135deg, #007396 0%, #005a76 100%)' }}>
+          <div className="stat-card" style={{ background: 'linear-gradient(135deg, #c1121f 0%, #c1121f 100%)' }}>
             <div className="stat-value">{analytics?.total_orders || 0}</div>
             <div className="stat-label">Total Orders</div>
           </div>
-          <div className="stat-card" style={{ background: 'linear-gradient(135deg, #339933 0%, #287a28 100%)' }}>
+          <div className="stat-card" style={{ background: 'linear-gradient(135deg, #780000 0%, #780000 100%)' }}>
             <div className="stat-value">{analytics?.total_notifications || 0}</div>
             <div className="stat-label">Total Notifications</div>
           </div>
@@ -90,7 +100,7 @@ function Analytics() {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="count" fill="#667eea" />
+              <Bar dataKey="count" fill="#003049" />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -144,10 +154,10 @@ function Analytics() {
 
       <div className="panel">
         <h3 style={{ marginBottom: '16px' }}>Service Communication Map</h3>
-        <div style={{ background: '#f9fafb', padding: '20px', borderRadius: '8px' }}>
+        <div style={{ background: '#fdf0d5', padding: '20px', borderRadius: '8px' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', fontSize: '14px' }}>
             <div>
-              <strong style={{ color: '#667eea' }}>→ Order Service calls:</strong>
+              <strong style={{ color: '#003049' }}>→ Order Service calls:</strong>
               <ul style={{ marginTop: '8px', marginLeft: '20px' }}>
                 <li>User Service (verify user exists)</li>
                 <li>Product Service (check availability)</li>
@@ -155,7 +165,7 @@ function Analytics() {
               </ul>
             </div>
             <div>
-              <strong style={{ color: '#CE422B' }}>→ Analytics Service calls:</strong>
+              <strong style={{ color: '#c1121f' }}>→ Analytics Service calls:</strong>
               <ul style={{ marginTop: '8px', marginLeft: '20px' }}>
                 <li>User Service (count users)</li>
                 <li>Product Service (count products)</li>
