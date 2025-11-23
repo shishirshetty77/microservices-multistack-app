@@ -78,7 +78,7 @@ analyticsService:
 frontend:
   enabled: true
   image: shishir77/frontend:c67d70f590a017e74caaa3accb285397c4d1e18e
-  replicas: 2
+  replicas: 3
   port: 3000
   serviceType: LoadBalancer
   resources:
