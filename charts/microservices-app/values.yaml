@@ -4,7 +4,7 @@ postgres:
   enabled: true
   image: shishir77/postgres:latest
   storage: 5Gi
-  storageClassName: standard-rwo
+  storageClassName: ""
   user: microservices
   password: microservices123
   dbName: microservices

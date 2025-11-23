@@ -6,7 +6,8 @@ metadata:
   labels:
     app: postgres
 spec:
-  accessModes: ""
+  accessModes:
+    - ReadWriteOnce
   resources:
     requests:
       storage: {{ .Values.postgres.storage }}
