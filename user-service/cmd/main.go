@@ -17,17 +17,14 @@ import (
 )
 
 func main() {
-	// Initialize configuration
 	cfg := config.Load()
 
-	// Initialize logger
 	log := logger.New(cfg.LogLevel)
 	log.Info("Starting User Service", map[string]interface{}{
 		"port":    cfg.Port,
 		"service": cfg.ServiceName,
 	})
 
-	// Initialize database
 	database, err := db.New(
 		getEnv("DB_HOST", "postgres"),
 		getEnv("DB_PORT", "5432"),
@@ -42,13 +39,10 @@ func main() {
 	}
 	defer database.Close()
 
-	// Initialize router
 	router := mux.NewRouter()
 
-	// Initialize handlers
 	userHandler := handlers.NewUserHandler(database, log)
 
-	// API routes
 	api := router.PathPrefix("/api").Subrouter()
 	api.HandleFunc("/users", userHandler.CreateUser).Methods("POST")
 	api.HandleFunc("/users", userHandler.GetUsers).Methods("GET")
@@ -56,14 +50,11 @@ func main() {
 	api.HandleFunc("/users/{id}", userHandler.UpdateUser).Methods("PUT")
 	api.HandleFunc("/users/{id}", userHandler.DeleteUser).Methods("DELETE")
 
-	// Health check
 	router.HandleFunc("/health", userHandler.HealthCheck).Methods("GET")
 
-	// CORS middleware
 	router.Use(corsMiddleware)
 	router.Use(loggingMiddleware(log))
 
-	// Create server
 	srv := &http.Server{
 		Addr:         fmt.Sprintf(":%s", cfg.Port),
 		Handler:      router,
@@ -72,7 +63,6 @@ func main() {
 		IdleTimeout:  60 * time.Second,
 	}
 
-	// Start server in goroutine
 	go func() {
 		log.Info("Server listening", map[string]interface{}{"port": cfg.Port})
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
@@ -81,7 +71,6 @@ func main() {
 		}
 	}()
 
-	// Graceful shutdown
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit

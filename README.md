@@ -1,305 +1,100 @@
-# Microservices E-Commerce Platform
+# Microservices Multistack Application
 
-A production-ready microservices architecture demonstrating best practices across five different programming languages: **Go**, **Python**, **Java**, **Node.js**, and **Rust**.
+A comprehensive, polyglot microservices reference architecture demonstrating modern cloud-native development practices. This project integrates five different programming languages, a modern frontend, and a complete DevOps pipeline using industry-standard tools.
 
-## 🏗️ Architecture Overview
+## 🚀 Architecture Overview
 
-This system implements a simplified e-commerce platform with the following services:
+The application simulates an e-commerce platform composed of loosely coupled microservices, each responsible for a specific domain.
 
-```
-┌─────────────┐
-│   Client    │
-└──────┬──────┘
-       │
-       ├──────────────┬──────────────┬──────────────┬──────────────┐
-       │              │              │              │              │
-       ▼              ▼              ▼              ▼              ▼
-┌──────────┐   ┌──────────┐   ┌──────────┐   ┌──────────┐   ┌──────────┐
-│   User   │   │ Product  │   │  Order   │   │Notification│ │Analytics │
-│ Service  │   │ Service  │   │ Service  │   │  Service   │ │ Service  │
-│   (Go)   │   │ (Python) │   │  (Java)  │   │  (Node.js) │ │  (Rust)  │
-└──────────┘   └──────────┘   └──────────┘   └──────────┘   └──────────┘
-     │              │              │                │              │
-     └──────────────┴──────────────┴────────────────┴──────────────┘
-                            Service Communication
-```
+### Services Stack
 
-## 📦 Services
+| Service | Technology | Port | Description |
+|---------|------------|------|-------------|
+| **Frontend** | React (Vite) | 3000 | Modern SPA dashboard for visualizing system status and metrics. |
+| **User Service** | Go | 8001 | Manages user identities and profiles. High-performance REST API. |
+| **Product Service** | Python (Flask) | 8002 | Handles product catalog and inventory management. |
+| **Order Service** | Java (Spring Boot) | 8003 | Orchestrates order processing by communicating with User, Product, and Notification services. |
+| **Notification Service** | Node.js (Express) | 8004 | Asynchronous notification handling and event logging. |
+| **Analytics Service** | Rust (Actix) | 8005 | High-speed data aggregation and real-time system metrics. |
+| **Database** | PostgreSQL | 5432 | Centralized relational storage for all services. |
 
-### 1. User Service (Go)
-- **Port**: 8001
-- **Purpose**: User authentication and profile management
-- **Tech Stack**: Go, Gorilla Mux
-- **Endpoints**:
-  - `POST /api/users` - Create new user
-  - `GET /api/users/:id` - Get user by ID
-  - `GET /api/users` - List all users
-  - `PUT /api/users/:id` - Update user
-  - `DELETE /api/users/:id` - Delete user
-  - `GET /health` - Health check
+### Infrastructure & DevOps
 
-### 2. Product Service (Python)
-- **Port**: 8002
-- **Purpose**: Product catalog management
-- **Tech Stack**: Python, Flask
-- **Endpoints**:
-  - `POST /api/products` - Create product
-  - `GET /api/products/:id` - Get product by ID
-  - `GET /api/products` - List all products
-  - `PUT /api/products/:id` - Update product
-  - `DELETE /api/products/:id` - Delete product
-  - `GET /health` - Health check
+- **Containerization**: Docker
+- **Orchestration**: Kubernetes (GKE)
+- **Infrastructure as Code**: Terraform
+- **Package Management**: Helm
+- **GitOps**: ArgoCD
+- **Monitoring**: Prometheus & Grafana
+- **CI/CD**: GitHub Actions
 
-### 3. Order Service (Java)
-- **Port**: 8003
-- **Purpose**: Order processing and management
-- **Tech Stack**: Java, Spring Boot
-- **Dependencies**: Calls User Service and Product Service
-- **Endpoints**:
-  - `POST /api/orders` - Create order (validates user & product)
-  - `GET /api/orders/:id` - Get order by ID
-  - `GET /api/orders/user/:userId` - Get orders by user
-  - `GET /api/orders` - List all orders
-  - `GET /health` - Health check
+## 🛠️ Prerequisites
 
-### 4. Notification Service (Node.js)
-- **Port**: 8004
-- **Purpose**: Send notifications for various events
-- **Tech Stack**: Node.js, Express
-- **Endpoints**:
-  - `POST /api/notifications/send` - Send notification
-  - `GET /api/notifications/:userId` - Get user notifications
-  - `GET /api/notifications` - List all notifications
-  - `GET /health` - Health check
+Ensure you have the following tools installed:
 
-### 5. Analytics Service (Rust)
-- **Port**: 8005
-- **Purpose**: Aggregate and analyze system metrics
-- **Tech Stack**: Rust, Actix-web
-- **Dependencies**: Calls all other services for metrics
-- **Endpoints**:
-  - `GET /api/analytics/summary` - Get system summary
-  - `GET /api/analytics/users` - User statistics
-  - `GET /api/analytics/products` - Product statistics
-  - `GET /api/analytics/orders` - Order statistics
-  - `GET /health` - Health check
+- [Docker](https://www.docker.com/)
+- [Kubernetes CLI (kubectl)](https://kubernetes.io/docs/tasks/tools/)
+- [Helm](https://helm.sh/)
+- [Terraform](https://www.terraform.io/)
+- [GCloud CLI](https://cloud.google.com/sdk/docs/install) (if using GKE)
 
-## 🔄 Service Communication Flow
+## 📦 Installation & Deployment
 
-**Example: Creating an Order**
-1. Client → Order Service: `POST /api/orders`
-2. Order Service → User Service: Validates user exists
-3. Order Service → Product Service: Validates product exists and stock
-4. Order Service → Notification Service: Sends order confirmation
-5. Order Service → Client: Returns order details
+### 1. Infrastructure Setup (Terraform)
 
-## 🚀 Getting Started
-
-### Prerequisites
-- Docker & Docker Compose
-- Or individual runtimes: Go 1.21+, Python 3.11+, Java 17+, Node.js 18+, Rust 1.70+
-
-### Quick Start with Docker Compose
+Initialize and apply the Terraform configuration to provision a GKE cluster.
 
 ```bash
-# Build all services
-docker-compose build
-
-# Start all services
-docker-compose up
-
-# Start in detached mode
-docker-compose up -d
-
-# View logs
-docker-compose logs -f
-
-# Stop all services
-docker-compose down
+cd terraform
+terraform init
+terraform apply
 ```
 
-### Using Makefile
+### 2. GitOps Setup (ArgoCD)
+
+Install ArgoCD into your cluster and configure the application.
 
 ```bash
-# Build all services
-make build
+# Install ArgoCD
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
-# Run all services
-make up
-
-# Stop all services
-make down
-
-# View logs
-make logs
-
-# Restart all services
-make restart
-
-# Clean up
-make clean
+# Access ArgoCD UI
+kubectl port-forward svc/argocd-server -n argocd 8080:443
 ```
 
-### Individual Service Development
+### 3. Deploy Application
 
-#### User Service (Go)
+Apply the ArgoCD Application manifest to trigger the GitOps sync.
+
 ```bash
-cd user-service
-go mod download
-go run cmd/main.go
+kubectl apply -f argocd/application.yaml
 ```
 
-#### Product Service (Python)
-```bash
-cd product-service
-pip install -r requirements.txt
-python src/app.py
-```
+ArgoCD will automatically detect the Helm charts in this repository and deploy the entire stack to your cluster.
 
-#### Order Service (Java)
-```bash
-cd order-service
-./mvnw spring-boot:run
-```
+## 📊 Monitoring
 
-#### Notification Service (Node.js)
-```bash
-cd notification-service
-npm install
-npm start
-```
+The stack includes a pre-configured Prometheus and Grafana stack.
 
-#### Analytics Service (Rust)
-```bash
-cd analytics-service
-cargo build --release
-cargo run
-```
+- **Grafana**: Access via LoadBalancer IP or port-forward.
+- **Dashboards**: Custom dashboards are provisioned automatically to visualize service health, request latency, and error rates.
 
-## 🧪 Testing the Services
+## 🤝 Contribution Guidelines
 
-### Create a User
-```bash
-curl -X POST http://localhost:8001/api/users \
-  -H "Content-Type: application/json" \
-  -d '{"name": "John Doe", "email": "john@example.com"}'
-```
+We welcome contributions from the community! Please follow these steps to contribute:
 
-### Create a Product
-```bash
-curl -X POST http://localhost:8002/api/products \
-  -H "Content-Type: application/json" \
-  -d '{"name": "Laptop", "price": 999.99, "stock": 50}'
-```
+1.  **Fork the Repository**: Create your own copy of the project.
+2.  **Create a Branch**: Use a descriptive name (e.g., `feat/new-analytics-metric`).
+3.  **Commit Changes**: Keep commits atomic and write clear messages.
+4.  **Submit a Pull Request**: Describe your changes detailedly and link any relevant issues.
 
-### Create an Order
-```bash
-curl -X POST http://localhost:8003/api/orders \
-  -H "Content-Type: application/json" \
-  -d '{"userId": "1", "productId": "1", "quantity": 2}'
-```
+### Code Standards
 
-### Get Analytics Summary
-```bash
-curl http://localhost:8005/api/analytics/summary
-```
+- **Clean Code**: Remove all debug comments and unused code before committing.
+- **Documentation**: Update relevant sections in this README if you change architecture or deployment steps.
+- **Testing**: Ensure all services pass their health checks locally before pushing.
 
-### Check Health of All Services
-```bash
-curl http://localhost:8001/health
-curl http://localhost:8002/health
-curl http://localhost:8003/health
-curl http://localhost:8004/health
-curl http://localhost:8005/health
-```
+## 📄 License
 
-## 📁 Project Structure
-
-```
-microservices-platform/
-├── user-service/           # Go service
-│   ├── cmd/
-│   │   └── main.go
-│   ├── internal/
-│   │   ├── handlers/
-│   │   ├── models/
-│   │   └── config/
-│   ├── Dockerfile
-│   └── go.mod
-├── product-service/        # Python service
-│   ├── src/
-│   │   ├── app.py
-│   │   ├── models.py
-│   │   ├── routes.py
-│   │   └── config.py
-│   ├── Dockerfile
-│   └── requirements.txt
-├── order-service/          # Java service
-│   ├── src/main/java/com/example/order/
-│   │   ├── OrderApplication.java
-│   │   ├── controller/
-│   │   ├── service/
-│   │   ├── model/
-│   │   └── config/
-│   ├── Dockerfile
-│   └── pom.xml
-├── notification-service/   # Node.js service
-│   ├── src/
-│   │   ├── app.js
-│   │   ├── routes/
-│   │   ├── models/
-│   │   └── config/
-│   ├── Dockerfile
-│   └── package.json
-├── analytics-service/      # Rust service
-│   ├── src/
-│   │   ├── main.rs
-│   │   ├── handlers/
-│   │   ├── models/
-│   │   └── config/
-│   ├── Dockerfile
-│   └── Cargo.toml
-├── docker-compose.yml
-├── Makefile
-└── README.md
-```
-
-## 🔧 Configuration
-
-Each service uses environment variables for configuration:
-
-- `PORT` - Service port
-- `SERVICE_NAME` - Service identifier
-- `LOG_LEVEL` - Logging level (debug, info, warn, error)
-- Service-specific URLs for inter-service communication
-
-## 📊 Best Practices Implemented
-
-✅ **Proper Folder Structure** - Each service follows language-specific conventions  
-✅ **Environment-based Configuration** - All services use env variables  
-✅ **Structured Logging** - JSON-formatted logs with levels  
-✅ **Error Handling** - Comprehensive error handling and validation  
-✅ **Health Checks** - All services expose `/health` endpoint  
-✅ **Dockerization** - Multi-stage builds for optimization  
-✅ **API Versioning** - All endpoints prefixed with `/api`  
-✅ **CORS Support** - Cross-origin requests enabled  
-✅ **Graceful Shutdown** - Proper signal handling  
-✅ **Service Discovery** - Via Docker networking  
-
-## 🛠️ Technology Stack
-
-| Service | Language | Framework | Port |
-|---------|----------|-----------|------|
-| User | Go 1.21 | Gorilla Mux | 8001 |
-| Product | Python 3.11 | Flask | 8002 |
-| Order | Java 17 | Spring Boot | 8003 |
-| Notification | Node.js 18 | Express | 8004 |
-| Analytics | Rust 1.70 | Actix-web | 8005 |
-
-## 📝 License
-
-MIT License - feel free to use this for learning and projects!
-
-## 🤝 Contributing
-
-This is a learning project showcasing microservices patterns. Feel free to fork and extend!
+This project is open-source and available under the MIT License.

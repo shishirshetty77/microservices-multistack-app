@@ -59,7 +59,7 @@ function Dashboard() {
 
   useEffect(() => {
     checkServices();
-    const interval = setInterval(checkServices, 5000); // Check every 5 seconds
+    const interval = setInterval(checkServices, 5000);
     return () => clearInterval(interval);
   }, []);
 

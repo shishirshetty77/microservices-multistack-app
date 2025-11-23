@@ -14,18 +14,14 @@ from logger import setup_logger
 app = Flask(__name__)
 CORS(app)
 
-# Load configuration
 config = Config()
 
-# Setup logger
 logger = setup_logger(config.LOG_LEVEL)
 
-# Register routes
 register_routes(app, logger)
 
 @app.route('/health', methods=['GET'])
 def health_check():
-    """Health check endpoint"""
     return jsonify({
         'status': 'healthy',
         'service': config.SERVICE_NAME,
@@ -33,12 +29,10 @@ def health_check():
     }), 200
 
 def signal_handler(sig, frame):
-    """Handle graceful shutdown"""
     logger.info('Shutting down gracefully...')
     sys.exit(0)
 
 if __name__ == '__main__':
-    # Register signal handlers
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
     

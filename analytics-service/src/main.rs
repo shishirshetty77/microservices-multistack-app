@@ -12,10 +12,8 @@ use crate::config::Config;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    // Initialize logger
     env_logger::Builder::from_env(Env::default().default_filter_or("info")).init();
 
-    // Load configuration
     let config = Config::new();
     
     info!("Starting {} on port {}", config.service_name, config.port);

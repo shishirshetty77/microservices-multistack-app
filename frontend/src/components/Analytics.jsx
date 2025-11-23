@@ -11,8 +11,6 @@ function Analytics() {
 
   const fetchAnalytics = async () => {
     try {
-      // Don't set loading to true here to avoid flickering on updates
-      // setLoading(true); 
       const response = await getAnalytics();
       setAnalytics(response.data);
       setError(null);
@@ -25,11 +23,10 @@ function Analytics() {
   };
 
   useEffect(() => {
-    // Initial load
     setLoading(true);
     fetchAnalytics();
     
-    const interval = setInterval(fetchAnalytics, 10000); // Update every 10 seconds
+    const interval = setInterval(fetchAnalytics, 10000);
     return () => clearInterval(interval);
   }, []);
 
