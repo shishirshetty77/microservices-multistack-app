@@ -116,3 +116,24 @@ The system consists of 5 microservices and a frontend:
 ### Analytics Service
 
 - `GET /api/analytics`: Get system stats
+
+## 🔧 Troubleshooting
+
+### Missing Databases
+
+If services fail to start with errors about missing databases (e.g., `FATAL: database "user_db" does not exist`), it means the automatic initialization was skipped. This happens if the Postgres data volume is not empty.
+
+To fix this, run the initialization script manually:
+
+**Local Development:**
+
+```bash
+docker exec -it postgres-db sh /docker-entrypoint-initdb.d/init.sh
+```
+
+**Remote Deployment:**
+
+```bash
+# SSH into the machine first
+docker exec postgres-db sh /docker-entrypoint-initdb.d/init.sh
+```

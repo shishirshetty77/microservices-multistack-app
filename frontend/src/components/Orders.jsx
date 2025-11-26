@@ -89,52 +89,54 @@ function Orders() {
         </button>
       </div>
 
-      <div className="form-split-layout">
-        <div className="form-panel">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        <div className="form-panel" style={{ width: '100%' }}>
           <h3 style={{ marginBottom: '24px', color: 'white' }}>Create New Order</h3>
 
           {error && <div className="status-badge status-unhealthy" style={{ marginBottom: '16px', width: '100%' }}>{error}</div>}
           {success && <div className="status-badge status-healthy" style={{ marginBottom: '16px', width: '100%' }}>{success}</div>}
 
           <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label>User ID</label>
-              <input
-                type="text"
-                value={formData.userId}
-                onChange={(e) => setFormData({ ...formData, userId: e.target.value })}
-                required
-                placeholder="Enter User ID"
-              />
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '24px' }}>
+              <div className="form-group">
+                <label>User ID</label>
+                <input
+                  type="text"
+                  value={formData.userId}
+                  onChange={(e) => setFormData({ ...formData, userId: e.target.value })}
+                  required
+                  placeholder="Enter User ID"
+                />
+              </div>
+              <div className="form-group">
+                <label>Product ID</label>
+                <input
+                  type="text"
+                  value={formData.productId}
+                  onChange={(e) => setFormData({ ...formData, productId: e.target.value })}
+                  required
+                  placeholder="Enter Product ID"
+                />
+              </div>
+              <div className="form-group">
+                <label>Quantity</label>
+                <input
+                  type="number"
+                  value={formData.quantity}
+                  onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
+                  required
+                  min="1"
+                  placeholder="1"
+                />
+              </div>
             </div>
-            <div className="form-group">
-              <label>Product ID</label>
-              <input
-                type="text"
-                value={formData.productId}
-                onChange={(e) => setFormData({ ...formData, productId: e.target.value })}
-                required
-                placeholder="Enter Product ID"
-              />
-            </div>
-            <div className="form-group">
-              <label>Quantity</label>
-              <input
-                type="number"
-                value={formData.quantity}
-                onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-                required
-                min="1"
-                placeholder="1"
-              />
-            </div>
-            <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '16px' }}>
+            <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '24px' }}>
               Place Order
             </button>
           </form>
         </div>
 
-        <div className="panel" style={{ padding: '0', overflow: 'hidden' }}>
+        <div className="panel" style={{ padding: '0', overflow: 'hidden', width: '100%' }}>
           <div className="panel-header" style={{ padding: '24px', borderBottom: '1px solid var(--border-glass)' }}>
             <h3 style={{ margin: 0 }}>Recent Orders ({orders.length})</h3>
           </div>
@@ -145,15 +147,15 @@ function Orders() {
             <div className="loading" style={{ padding: '40px', textAlign: 'center', color: 'var(--text-secondary)' }}>No orders found. Create one!</div>
           ) : (
             <div className="table-container">
-              <table>
+              <table style={{ width: '100%' }}>
                 <thead>
                   <tr>
-                    <th>Order ID</th>
-                    <th>User ID</th>
-                    <th>Product ID</th>
-                    <th>Qty</th>
-                    <th>Total</th>
-                    <th>Status</th>
+                    <th style={{ width: '10%' }}>Order ID</th>
+                    <th style={{ width: '20%' }}>User ID</th>
+                    <th style={{ width: '20%' }}>Product ID</th>
+                    <th style={{ width: '10%' }}>Qty</th>
+                    <th style={{ width: '20%' }}>Total</th>
+                    <th style={{ width: '20%' }}>Status</th>
                   </tr>
                 </thead>
                 <tbody>

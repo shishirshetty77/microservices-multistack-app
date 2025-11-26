@@ -75,8 +75,8 @@ function Users() {
         </button>
       </div>
 
-      <div className="form-split-layout">
-        <div className="form-panel">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        <div className="form-panel" style={{ width: '100%' }}>
           <h3 style={{ marginBottom: '24px', color: 'white' }}>
             {editingId ? 'Edit User' : 'Create New User'}
           </h3>
@@ -85,27 +85,29 @@ function Users() {
           {success && <div className="status-badge status-healthy" style={{ marginBottom: '16px', width: '100%' }}>{success}</div>}
 
           <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label>Full Name</label>
-              <input
-                type="text"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                required
-                placeholder="e.g. John Doe"
-              />
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+              <div className="form-group">
+                <label>Full Name</label>
+                <input
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  required
+                  placeholder="e.g. John Doe"
+                />
+              </div>
+              <div className="form-group">
+                <label>Email Address</label>
+                <input
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  required
+                  placeholder="john@example.com"
+                />
+              </div>
             </div>
-            <div className="form-group">
-              <label>Email Address</label>
-              <input
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                required
-                placeholder="john@example.com"
-              />
-            </div>
-            <div style={{ display: 'flex', gap: '12px', marginTop: '32px' }}>
+            <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
               <button type="submit" className="btn btn-primary" style={{ flex: 1 }}>
                 {editingId ? 'Update' : 'Create User'}
               </button>
@@ -126,7 +128,7 @@ function Users() {
           </form>
         </div>
 
-        <div className="panel" style={{ padding: '0', overflow: 'hidden' }}>
+        <div className="panel" style={{ padding: '0', overflow: 'hidden', width: '100%' }}>
           <div className="panel-header" style={{ padding: '24px', borderBottom: '1px solid var(--border-glass)' }}>
             <h3 style={{ margin: 0 }}>Registered Users ({users.length})</h3>
           </div>
@@ -137,13 +139,13 @@ function Users() {
             <div className="loading" style={{ padding: '40px', textAlign: 'center', color: 'var(--text-secondary)' }}>No users found. Create one!</div>
           ) : (
             <div className="table-container">
-              <table>
+              <table style={{ width: '100%' }}>
                 <thead>
                   <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th style={{ textAlign: 'right' }}>Actions</th>
+                    <th style={{ width: '10%' }}>ID</th>
+                    <th style={{ width: '30%' }}>Name</th>
+                    <th style={{ width: '40%' }}>Email</th>
+                    <th style={{ textAlign: 'right', width: '20%' }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>

@@ -85,8 +85,8 @@ function Products() {
         </button>
       </div>
 
-      <div className="form-split-layout">
-        <div className="form-panel">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        <div className="form-panel" style={{ width: '100%' }}>
           <h3 style={{ marginBottom: '24px', color: 'white' }}>
             {editingId ? 'Edit Product' : 'Add New Product'}
           </h3>
@@ -95,38 +95,40 @@ function Products() {
           {success && <div className="status-badge status-healthy" style={{ marginBottom: '16px', width: '100%' }}>{success}</div>}
 
           <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label>Product Name</label>
-              <input
-                type="text"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                required
-                placeholder="e.g. Wireless Mouse"
-              />
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '24px' }}>
+              <div className="form-group">
+                <label>Product Name</label>
+                <input
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  required
+                  placeholder="e.g. Wireless Mouse"
+                />
+              </div>
+              <div className="form-group">
+                <label>Price ($)</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={formData.price}
+                  onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                  required
+                  placeholder="0.00"
+                />
+              </div>
+              <div className="form-group">
+                <label>Stock Quantity</label>
+                <input
+                  type="number"
+                  value={formData.stock}
+                  onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
+                  required
+                  placeholder="0"
+                />
+              </div>
             </div>
-            <div className="form-group">
-              <label>Price ($)</label>
-              <input
-                type="number"
-                step="0.01"
-                value={formData.price}
-                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                required
-                placeholder="0.00"
-              />
-            </div>
-            <div className="form-group">
-              <label>Stock Quantity</label>
-              <input
-                type="number"
-                value={formData.stock}
-                onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
-                required
-                placeholder="0"
-              />
-            </div>
-            <div style={{ display: 'flex', gap: '12px', marginTop: '32px' }}>
+            <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
               <button type="submit" className="btn btn-primary" style={{ flex: 1 }}>
                 {editingId ? 'Update' : 'Add Product'}
               </button>
@@ -147,7 +149,7 @@ function Products() {
           </form>
         </div>
 
-        <div className="panel" style={{ padding: '0', overflow: 'hidden' }}>
+        <div className="panel" style={{ padding: '0', overflow: 'hidden', width: '100%' }}>
           <div className="panel-header" style={{ padding: '24px', borderBottom: '1px solid var(--border-glass)' }}>
             <h3 style={{ margin: 0 }}>Inventory List ({products.length})</h3>
           </div>
@@ -158,14 +160,14 @@ function Products() {
             <div className="loading" style={{ padding: '40px', textAlign: 'center', color: 'var(--text-secondary)' }}>No products found. Add one!</div>
           ) : (
             <div className="table-container">
-              <table>
+              <table style={{ width: '100%' }}>
                 <thead>
                   <tr>
-                    <th>ID</th>
-                    <th>Product Name</th>
-                    <th>Price</th>
-                    <th>Stock</th>
-                    <th style={{ textAlign: 'right' }}>Actions</th>
+                    <th style={{ width: '10%' }}>ID</th>
+                    <th style={{ width: '30%' }}>Product Name</th>
+                    <th style={{ width: '20%' }}>Price</th>
+                    <th style={{ width: '20%' }}>Stock</th>
+                    <th style={{ textAlign: 'right', width: '20%' }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>

@@ -172,8 +172,8 @@ function Topology() {
         </div>
       </div>
 
-      <div className="main-content">
-        <div className="panel">
+      <div className="main-content" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+        <div className="panel" style={{ margin: 0 }}>
           <h3 style={{ marginBottom: '16px' }}>📋 Communication Flow</h3>
           <div style={{ display: 'grid', gap: '12px' }}>
             <div className="item">
@@ -210,7 +210,7 @@ function Topology() {
           </div>
         </div>
 
-        <div className="panel">
+        <div className="panel" style={{ margin: 0 }}>
           <h3 style={{ marginBottom: '16px' }}>🔧 Technology Stack</h3>
           <div style={{ display: 'grid', gap: '12px' }}>
             <div style={{ padding: '12px', background: '#00ADD820', borderRadius: '8px', borderLeft: '4px solid #00ADD8' }}>
