@@ -1,0 +1,90 @@
+#!/bin/bash
+set -e
+
+echo "Creating databases..."
+
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+    CREATE DATABASE "user_db";
+    CREATE DATABASE "product_db";
+    CREATE DATABASE "order_db";
+    CREATE DATABASE "notification_db";
+    CREATE DATABASE "analytics_db";
+    
+    GRANT ALL PRIVILEGES ON DATABASE "user_db" TO "$POSTGRES_USER";
+    GRANT ALL PRIVILEGES ON DATABASE "product_db" TO "$POSTGRES_USER";
+    GRANT ALL PRIVILEGES ON DATABASE "order_db" TO "$POSTGRES_USER";
+    GRANT ALL PRIVILEGES ON DATABASE "notification_db" TO "$POSTGRES_USER";
+    GRANT ALL PRIVILEGES ON DATABASE "analytics_db" TO "$POSTGRES_USER";
+EOSQL
+
+echo "Databases created successfully."
+
+echo "Applying schemas..."
+
+# User Service Schema
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "user_db" <<-EOSQL
+    CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+    
+    INSERT INTO users (name, email) VALUES 
+        ('John Doe', 'john@example.com'),
+        ('Jane Smith', 'jane@example.com'),
+        ('Bob Johnson', 'bob@example.com')
+    ON CONFLICT (email) DO NOTHING;
+EOSQL
+
+# Product Service Schema
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "product_db" <<-EOSQL
+    CREATE TABLE IF NOT EXISTS products (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        price DECIMAL(10, 2) NOT NULL,
+        stock INTEGER NOT NULL DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    
+    INSERT INTO products (name, price, stock) VALUES 
+        ('Laptop', 999.99, 10),
+        ('Mouse', 29.99, 50),
+        ('Keyboard', 79.99, 30),
+        ('Monitor', 299.99, 15)
+    ON CONFLICT DO NOTHING;
+EOSQL
+
+# Order Service Schema
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "order_db" <<-EOSQL
+    CREATE TABLE IF NOT EXISTS orders (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL,
+        product_id INTEGER NOT NULL,
+        quantity INTEGER NOT NULL,
+        total_price DECIMAL(10, 2) NOT NULL,
+        status VARCHAR(50) NOT NULL DEFAULT 'pending',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    CREATE INDEX IF NOT EXISTS idx_orders_user_id ON orders(user_id);
+    CREATE INDEX IF NOT EXISTS idx_orders_product_id ON orders(product_id);
+EOSQL
+
+# Notification Service Schema
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "notification_db" <<-EOSQL
+    CREATE TABLE IF NOT EXISTS notifications (
+        id SERIAL PRIMARY KEY,
+        user_id VARCHAR(50) NOT NULL,
+        message TEXT NOT NULL,
+        type VARCHAR(50) NOT NULL,
+        read BOOLEAN DEFAULT FALSE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    CREATE INDEX IF NOT EXISTS idx_notifications_user_id ON notifications(user_id);
+    CREATE INDEX IF NOT EXISTS idx_notifications_read ON notifications(read);
+EOSQL
+
+echo "Schemas applied successfully."

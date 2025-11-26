@@ -2,6 +2,7 @@ package com.example.order.service;
 
 import com.example.order.config.AppConfig;
 import com.example.order.model.Order;
+import com.example.order.repository.OrderRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,8 @@ public class OrderService {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
-    private final Map<String, Order> orders = new ConcurrentHashMap<>();
-    private final AtomicInteger nextId = new AtomicInteger(1);
+    @Autowired
+    private OrderRepository orderRepository;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -49,41 +50,38 @@ public class OrderService {
         Double price = ((Number) product.get("price")).doubleValue();
         order.setTotalPrice(price * order.getQuantity());
 
-        // Assign ID and save
-        order.setId(String.valueOf(nextId.getAndIncrement()));
+        // Set status
         order.setStatus("confirmed");
-        orders.put(order.getId(), order);
+        order.setCreatedAt(LocalDateTime.now());
+        order.setUpdatedAt(LocalDateTime.now());
+
+        // Save to DB
+        Order savedOrder = orderRepository.save(order);
 
         // Send notification (async, don't wait)
         try {
-            sendNotification(order);
+            sendNotification(savedOrder);
         } catch (Exception e) {
             logger.warn("Failed to send notification: {}", e.getMessage());
         }
 
-        logger.info("Order created: {}", order.getId());
-        return order;
+        logger.info("Order created: {}", savedOrder.getId());
+        return savedOrder;
     }
 
-    public Order getOrder(String id) {
-        return orders.get(id);
+    public Order getOrder(Long id) {
+        return orderRepository.findById(id).orElse(null);
     }
 
     public List<Order> getAllOrders() {
-        return new ArrayList<>(orders.values());
+        return orderRepository.findAll();
     }
 
-    public List<Order> getOrdersByUser(String userId) {
-        List<Order> userOrders = new ArrayList<>();
-        for (Order order : orders.values()) {
-            if (order.getUserId().equals(userId)) {
-                userOrders.add(order);
-            }
-        }
-        return userOrders;
+    public List<Order> getOrdersByUser(Long userId) {
+        return orderRepository.findByUserId(userId);
     }
 
-    private boolean verifyUser(String userId) {
+    private boolean verifyUser(Long userId) {
         try {
             String url = config.getUserServiceUrl() + "/api/users/" + userId;
             restTemplate.getForObject(url, Map.class);
@@ -96,7 +94,7 @@ public class OrderService {
         }
     }
 
-    private Map<String, Object> verifyProduct(String productId) {
+    private Map<String, Object> verifyProduct(Long productId) {
         try {
             String url = config.getProductServiceUrl() + "/api/products/" + productId;
             return restTemplate.getForObject(url, Map.class);

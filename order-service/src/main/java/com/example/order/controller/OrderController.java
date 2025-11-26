@@ -43,7 +43,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getOrder(@PathVariable String id) {
+    public ResponseEntity<?> getOrder(@PathVariable Long id) {
         Order order = orderService.getOrder(id);
         if (order == null) {
             Map<String, String> error = new HashMap<>();
@@ -60,7 +60,7 @@ public class OrderController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Order>> getOrdersByUser(@PathVariable String userId) {
+    public ResponseEntity<List<Order>> getOrdersByUser(@PathVariable Long userId) {
         List<Order> orders = orderService.getOrdersByUser(userId);
         return ResponseEntity.ok(orders);
     }

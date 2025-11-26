@@ -1,15 +1,34 @@
 package com.example.order.model;
 
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "orders")
 public class Order {
-    private String id;
-    private String userId;
-    private String productId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
+
+    @Column(name = "product_id", nullable = false)
+    private Long productId;
+
+    @Column(nullable = false)
     private Integer quantity;
+
+    @Column(name = "total_price", nullable = false)
     private Double totalPrice;
+
+    @Column(nullable = false)
     private String status;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     public Order() {
@@ -18,7 +37,7 @@ public class Order {
         this.status = "pending";
     }
 
-    public Order(String userId, String productId, Integer quantity) {
+    public Order(Long userId, Long productId, Integer quantity) {
         this();
         this.userId = userId;
         this.productId = productId;
@@ -26,27 +45,27 @@ public class Order {
     }
 
     // Getters and Setters
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public String getProductId() {
+    public Long getProductId() {
         return productId;
     }
 
-    public void setProductId(String productId) {
+    public void setProductId(Long productId) {
         this.productId = productId;
     }
 
@@ -91,8 +110,8 @@ public class Order {
     }
 
     public boolean validate() {
-        return userId != null && !userId.isEmpty() &&
-               productId != null && !productId.isEmpty() &&
+        return userId != null &&
+               productId != null &&
                quantity != null && quantity > 0;
     }
 }
