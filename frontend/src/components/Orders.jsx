@@ -82,117 +82,100 @@ function Orders() {
 
   return (
     <div className="main-content">
-      <div className="panel">
-        <div className="panel-header">
-          <h2 className="panel-title">Create New Order</h2>
-        </div>
-
-        {error && <div className="error">{error}</div>}
-        {success && <div className="success">{success}</div>}
-
-        <div className="success" style={{ marginBottom: '16px' }}>
-          <strong>How it works:</strong><br/>
-          When you create an order, the Order Service (Java) will:
-          <ol style={{ marginTop: '8px', marginLeft: '20px' }}>
-            <li>Call User Service to verify the user exists</li>
-            <li>Call Product Service to check product availability</li>
-            <li>Call Notification Service to send a confirmation</li>
-          </ol>
-          This demonstrates microservice orchestration!
-        </div>
-
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Select User</label>
-            <select
-              value={formData.userId}
-              onChange={(e) => setFormData({ ...formData, userId: e.target.value })}
-              required
-            >
-              <option value="">Choose a user...</option>
-              {users.map((user) => (
-                <option key={user.id} value={user.id}>
-                  {user.name} ({user.email})
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="form-group">
-            <label>Select Product</label>
-            <select
-              value={formData.productId}
-              onChange={(e) => setFormData({ ...formData, productId: e.target.value })}
-              required
-            >
-              <option value="">Choose a product...</option>
-              {products.map((product) => (
-                <option key={product.id} value={product.id}>
-                  {product.name} - ${product.price} (Stock: {product.stock})
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="form-group">
-            <label>Quantity</label>
-            <input
-              type="number"
-              min="1"
-              value={formData.quantity}
-              onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-              required
-            />
-          </div>
-          <button type="submit" className="btn btn-primary">
-            Create Order
-          </button>
-        </form>
+      <div className="top-bar">
+        <h2 className="page-title">Order Processing</h2>
+        <button onClick={fetchOrders} className="btn-icon">
+          🔄
+        </button>
       </div>
 
-      <div className="panel">
-        <div className="panel-header">
-          <h2 className="panel-title">All Orders ({orders.length})</h2>
-          <button onClick={fetchOrders} className="btn btn-success">
-            Refresh
-          </button>
+      <div className="form-split-layout">
+        <div className="form-panel">
+          <h3 style={{ marginBottom: '24px', color: 'white' }}>Create New Order</h3>
+
+          {error && <div className="status-badge status-unhealthy" style={{ marginBottom: '16px', width: '100%' }}>{error}</div>}
+          {success && <div className="status-badge status-healthy" style={{ marginBottom: '16px', width: '100%' }}>{success}</div>}
+
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label>User ID</label>
+              <input
+                type="text"
+                value={formData.userId}
+                onChange={(e) => setFormData({ ...formData, userId: e.target.value })}
+                required
+                placeholder="Enter User ID"
+              />
+            </div>
+            <div className="form-group">
+              <label>Product ID</label>
+              <input
+                type="text"
+                value={formData.productId}
+                onChange={(e) => setFormData({ ...formData, productId: e.target.value })}
+                required
+                placeholder="Enter Product ID"
+              />
+            </div>
+            <div className="form-group">
+              <label>Quantity</label>
+              <input
+                type="number"
+                value={formData.quantity}
+                onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
+                required
+                min="1"
+                placeholder="1"
+              />
+            </div>
+            <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '16px' }}>
+              Place Order
+            </button>
+          </form>
         </div>
 
-        {loading ? (
-          <div className="loading">Loading orders...</div>
-        ) : orders.length === 0 ? (
-          <div className="loading">No orders found. Create one!</div>
-        ) : (
-          <div className="item-list">
-            {orders.map((order) => (
-              <div key={order.id} className="item">
-                <div className="item-header">
-                  <div className="item-title">Order #{order.id}</div>
-                  <button
-                    onClick={() => handleDelete(order.id)}
-                    className="btn btn-danger"
-                    style={{ padding: '4px 12px', fontSize: '12px' }}
-                  >
-                    Delete
-                  </button>
-                </div>
-                <div className="item-details">
-                  <strong>User ID:</strong> {order.userId}
-                </div>
-                <div className="item-details">
-                  <strong>Product ID:</strong> {order.productId}
-                </div>
-                <div className="item-details">
-                  <strong>Quantity:</strong> {order.quantity}
-                </div>
-                <div className="item-details">
-                  <strong>Total:</strong> ${order.totalPrice?.toFixed(2) || 'N/A'}
-                </div>
-                <div className="item-details">
-                  <strong>Status:</strong> {order.status || 'Confirmed'}
-                </div>
-              </div>
-            ))}
+        <div className="panel" style={{ padding: '0', overflow: 'hidden' }}>
+          <div className="panel-header" style={{ padding: '24px', borderBottom: '1px solid var(--border-glass)' }}>
+            <h3 style={{ margin: 0 }}>Recent Orders ({orders.length})</h3>
           </div>
-        )}
+
+          {loading ? (
+            <div className="loading" style={{ padding: '40px', textAlign: 'center', color: 'var(--text-secondary)' }}>Loading orders...</div>
+          ) : orders.length === 0 ? (
+            <div className="loading" style={{ padding: '40px', textAlign: 'center', color: 'var(--text-secondary)' }}>No orders found. Create one!</div>
+          ) : (
+            <div className="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>User ID</th>
+                    <th>Product ID</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {orders.map((order) => (
+                    <tr key={order.id}>
+                      <td style={{ fontFamily: 'monospace', color: 'var(--primary)' }}>#{order.id}</td>
+                      <td>User #{order.userId}</td>
+                      <td>Product #{order.productId}</td>
+                      <td>{order.quantity}</td>
+                      <td style={{ color: 'var(--success)', fontWeight: '600' }}>${order.totalPrice.toFixed(2)}</td>
+                      <td>
+                        <span className="status-badge status-healthy">
+                          {order.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

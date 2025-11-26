@@ -13,4 +13,7 @@ data:
   PRODUCT_SERVICE_URL: "http://product-service:{{ .Values.productService.port }}"
   ORDER_SERVICE_URL: "http://order-service:{{ .Values.orderService.port }}"
   NOTIFICATION_SERVICE_URL: "http://notification-service:{{ .Values.notificationService.port }}"
+  DB_HOST: "postgres-service"
+  DB_PORT: "5432"
+  DB_NAME: {{ .Values.analyticsService.dbName | quote }}
 {{- end }}

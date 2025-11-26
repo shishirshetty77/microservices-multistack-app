@@ -19,6 +19,7 @@ userService:
   image: shishir77/user-service:7089cc0cfae43b997170176248242f62e2d66207
   replicas: 2
   port: 8001
+  dbName: user_db
   resources:
     requests:
       memory: "128Mi"
@@ -30,6 +31,7 @@ productService:
   image: shishir77/product-service:7089cc0cfae43b997170176248242f62e2d66207
   replicas: 2
   port: 8002
+  dbName: product_db
   resources:
     requests:
       memory: "128Mi"
@@ -41,6 +43,7 @@ orderService:
   image: shishir77/order-service:7089cc0cfae43b997170176248242f62e2d66207
   replicas: 2
   port: 8003
+  dbName: order_db
   resources:
     requests:
       memory: "256Mi"
@@ -52,6 +55,7 @@ notificationService:
   image: shishir77/notification-service:7089cc0cfae43b997170176248242f62e2d66207
   replicas: 2
   port: 8004
+  dbName: notification_db
   resources:
     requests:
       memory: "128Mi"
@@ -63,6 +67,7 @@ analyticsService:
   image: shishir77/analytics-service:7089cc0cfae43b997170176248242f62e2d66207
   replicas: 2
   port: 8005
+  dbName: analytics_db
   resources:
     requests:
       memory: "128Mi"

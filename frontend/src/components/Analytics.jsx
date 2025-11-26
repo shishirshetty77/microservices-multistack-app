@@ -87,88 +87,90 @@ function Analytics() {
         </div>
       </div>
 
-      <div className="main-content">
-        <div className="panel">
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '24px' }}>
+        <div className="panel" style={{ margin: 0 }}>
           <h3 style={{ marginBottom: '20px' }}>Distribution Overview</h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+              <XAxis dataKey="name" stroke="#94a3b8" />
+              <YAxis stroke="#94a3b8" />
+              <Tooltip 
+                contentStyle={{ backgroundColor: '#1e293b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}
+                itemStyle={{ color: '#fff' }}
+              />
               <Legend />
-              <Bar dataKey="count" fill="#003049" />
+              <Bar dataKey="count" fill="#06b6d4" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
-        <div className="panel">
+        <div className="panel" style={{ margin: 0 }}>
           <h3 style={{ marginBottom: '20px' }}>System Composition</h3>
-          <ResponsiveContainer width="100%" height={350}>
+          <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie
                 data={chartData}
                 cx="50%"
                 cy="50%"
-                labelLine={false}
-                label={({ cx, cy, midAngle, innerRadius, outerRadius, name, value }) => {
-                  const RADIAN = Math.PI / 180;
-                  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-                  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-                  const y = cy + radius * Math.sin(-midAngle * RADIAN);
-                  
-                  return (
-                    <text 
-                      x={x} 
-                      y={y} 
-                      fill="white" 
-                      textAnchor={x > cx ? 'start' : 'end'} 
-                      dominantBaseline="central"
-                      style={{ fontSize: '12px', fontWeight: 'bold' }}
-                    >
-                      {value > 0 ? `${name}: ${value}` : ''}
-                    </text>
-                  );
-                }}
+                innerRadius={60}
                 outerRadius={100}
-                fill="#8884d8"
+                paddingAngle={5}
                 dataKey="count"
               >
                 {chartData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip formatter={(value, name) => [`${value}`, name]} />
-              <Legend 
-                verticalAlign="bottom" 
-                height={36}
-                formatter={(value, entry) => `${value}: ${entry.payload.value}`}
+              <Tooltip 
+                contentStyle={{ backgroundColor: '#1e293b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}
+                itemStyle={{ color: '#fff' }}
               />
+              <Legend verticalAlign="bottom" height={36} />
             </PieChart>
           </ResponsiveContainer>
         </div>
       </div>
 
       <div className="panel">
-        <h3 style={{ marginBottom: '16px' }}>Service Communication Map</h3>
-        <div style={{ background: '#fdf0d5', padding: '20px', borderRadius: '8px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', fontSize: '14px' }}>
-            <div>
-              <strong style={{ color: '#003049' }}>→ Order Service calls:</strong>
-              <ul style={{ marginTop: '8px', marginLeft: '20px' }}>
-                <li>User Service (verify user exists)</li>
-                <li>Product Service (check availability)</li>
-                <li>Notification Service (send confirmation)</li>
-              </ul>
+        <h3 style={{ marginBottom: '24px' }}>Service Communication Map</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+          <div style={{ background: 'rgba(6, 182, 212, 0.1)', padding: '24px', borderRadius: '16px', border: '1px solid rgba(6, 182, 212, 0.2)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
+              <span style={{ fontSize: '24px', marginRight: '12px' }}>☕</span>
+              <h4 style={{ margin: 0, color: '#06b6d4' }}>Order Service Flow</h4>
             </div>
-            <div>
-              <strong style={{ color: '#c1121f' }}>→ Analytics Service calls:</strong>
-              <ul style={{ marginTop: '8px', marginLeft: '20px' }}>
-                <li>User Service (count users)</li>
-                <li>Product Service (count products)</li>
-                <li>Order Service (count orders)</li>
-                <li>Notification Service (count notifications)</li>
-              </ul>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', color: 'var(--text-secondary)' }}>
+                <span style={{ marginRight: '8px' }}>→</span> Verifies User (User Service)
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', color: 'var(--text-secondary)' }}>
+                <span style={{ marginRight: '8px' }}>→</span> Checks Stock (Product Service)
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', color: 'var(--text-secondary)' }}>
+                <span style={{ marginRight: '8px' }}>→</span> Sends Alert (Notification Service)
+              </div>
+            </div>
+          </div>
+
+          <div style={{ background: 'rgba(139, 92, 246, 0.1)', padding: '24px', borderRadius: '16px', border: '1px solid rgba(139, 92, 246, 0.2)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
+              <span style={{ fontSize: '24px', marginRight: '12px' }}>🦀</span>
+              <h4 style={{ margin: 0, color: '#8b5cf6' }}>Analytics Aggregation</h4>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', color: 'var(--text-secondary)' }}>
+                <span style={{ marginRight: '8px' }}>⚡</span> Polls User Counts
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', color: 'var(--text-secondary)' }}>
+                <span style={{ marginRight: '8px' }}>⚡</span> Polls Product Inventory
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', color: 'var(--text-secondary)' }}>
+                <span style={{ marginRight: '8px' }}>⚡</span> Polls Order History
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', color: 'var(--text-secondary)' }}>
+                <span style={{ marginRight: '8px' }}>⚡</span> Polls Notification Logs
+              </div>
             </div>
           </div>
         </div>

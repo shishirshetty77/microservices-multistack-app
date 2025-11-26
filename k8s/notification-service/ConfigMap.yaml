@@ -10,4 +10,4 @@ data:
   LOG_LEVEL: "info"
   DB_HOST: "postgres-service"
   DB_PORT: "5432"
-  DB_NAME: "microservices"
+  DB_NAME: "notification_db"

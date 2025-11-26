@@ -12,45 +12,68 @@ function App() {
   const location = useLocation();
 
   return (
-    <div className="container">
-      <div className="header">
-        <h1> Microservices Dashboard</h1>
-        <p>Multi-language microservices architecture in action</p>
-      </div>
+    <div className="app-container">
+      <aside className="sidebar">
+        <div className="sidebar-content">
+          <div className="sidebar-header">
+            <div className="logo-icon">M</div>
+            <h1>Microservices</h1>
+          </div>
+          
+          <nav className="sidebar-nav">
+            <Link to="/" className={`nav-item ${location.pathname === '/' ? 'active' : ''}`}>
+              <span className="nav-icon">📊</span>
+              Dashboard
+            </Link>
+            <Link to="/topology" className={`nav-item ${location.pathname === '/topology' ? 'active' : ''}`}>
+              <span className="nav-icon">🕸️</span>
+              Topology
+            </Link>
+            <Link to="/users" className={`nav-item ${location.pathname === '/users' ? 'active' : ''}`}>
+              <span className="nav-icon">👥</span>
+              Users
+            </Link>
+            <Link to="/products" className={`nav-item ${location.pathname === '/products' ? 'active' : ''}`}>
+              <span className="nav-icon">📦</span>
+              Products
+            </Link>
+            <Link to="/orders" className={`nav-item ${location.pathname === '/orders' ? 'active' : ''}`}>
+              <span className="nav-icon">🛒</span>
+              Orders
+            </Link>
+            <Link to="/notifications" className={`nav-item ${location.pathname === '/notifications' ? 'active' : ''}`}>
+              <span className="nav-icon">🔔</span>
+              Notifications
+            </Link>
+            <Link to="/analytics" className={`nav-item ${location.pathname === '/analytics' ? 'active' : ''}`}>
+              <span className="nav-icon">📈</span>
+              Analytics
+            </Link>
+          </nav>
 
-      <nav className="nav">
-        <Link to="/" className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}>
-          Dashboard
-        </Link>
-        <Link to="/topology" className={`nav-link ${location.pathname === '/topology' ? 'active' : ''}`}>
-          Topology
-        </Link>
-        <Link to="/users" className={`nav-link ${location.pathname === '/users' ? 'active' : ''}`}>
-          Users
-        </Link>
-        <Link to="/products" className={`nav-link ${location.pathname === '/products' ? 'active' : ''}`}>
-          Products
-        </Link>
-        <Link to="/orders" className={`nav-link ${location.pathname === '/orders' ? 'active' : ''}`}>
-          Orders
-        </Link>
-        <Link to="/notifications" className={`nav-link ${location.pathname === '/notifications' ? 'active' : ''}`}>
-          Notifications
-        </Link>
-        <Link to="/analytics" className={`nav-link ${location.pathname === '/analytics' ? 'active' : ''}`}>
-          Analytics
-        </Link>
-      </nav>
+        </div>
+      </aside>
 
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/topology" element={<Topology />} />
-        <Route path="/users" element={<Users />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/orders" element={<Orders />} />
-        <Route path="/notifications" element={<Notifications />} />
-        <Route path="/analytics" element={<Analytics />} />
-      </Routes>
+      <main className="main-content">
+        <header className="top-bar">
+          <h2 className="page-title">
+            {location.pathname === '/' ? 'Dashboard' : 
+             location.pathname.substring(1).charAt(0).toUpperCase() + location.pathname.slice(2)}
+          </h2>
+        </header>
+
+        <div className="content-area">
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/topology" element={<Topology />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/notifications" element={<Notifications />} />
+            <Route path="/analytics" element={<Analytics />} />
+          </Routes>
+        </div>
+      </main>
     </div>
   );
 }
