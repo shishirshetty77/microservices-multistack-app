@@ -12,7 +12,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
-      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      - ./db-init/init.sh:/docker-entrypoint-initdb.d/init.sh
     networks:
       - microservices-network
     healthcheck:
@@ -36,7 +36,7 @@ services:
       - DB_PORT=5432
       - DB_USER=microservices
       - DB_PASSWORD=microservices123
-      - DB_NAME=microservices
+      - DB_NAME=user_db
     networks:
       - microservices-network
     depends_on:
@@ -65,7 +65,7 @@ services:
       - DB_PORT=5432
       - DB_USER=microservices
       - DB_PASSWORD=microservices123
-      - DB_NAME=microservices
+      - DB_NAME=product_db
     networks:
       - microservices-network
     depends_on:
@@ -98,7 +98,7 @@ services:
       - DB_PORT=5432
       - DB_USER=microservices
       - DB_PASSWORD=microservices123
-      - DB_NAME=microservices
+      - DB_NAME=order_db
     networks:
       - microservices-network
     depends_on:
@@ -132,7 +132,7 @@ services:
       - DB_PORT=5432
       - DB_USER=microservices
       - DB_PASSWORD=microservices123
-      - DB_NAME=microservices
+      - DB_NAME=notification_db
     networks:
       - microservices-network
     depends_on:
@@ -160,6 +160,11 @@ services:
       - PRODUCT_SERVICE_URL=http://product-service:8002
       - ORDER_SERVICE_URL=http://order-service:8003
       - NOTIFICATION_SERVICE_URL=http://notification-service:8004
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=microservices
+      - DB_PASSWORD=microservices123
+      - DB_NAME=analytics_db
     networks:
       - microservices-network
     depends_on:

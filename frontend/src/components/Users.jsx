@@ -68,102 +68,119 @@ function Users() {
 
   return (
     <div className="main-content">
-      <div className="panel">
-        <div className="panel-header">
-          <h2 className="panel-title">
-            {editingId ? 'Edit User' : 'Create New User'}
-          </h2>
-        </div>
-
-        {error && <div className="error">{error}</div>}
-        {success && <div className="success">{success}</div>}
-
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Name</label>
-            <input
-              type="text"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              required
-              placeholder="Enter user name"
-            />
-          </div>
-          <div className="form-group">
-            <label>Email</label>
-            <input
-              type="email"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              required
-              placeholder="Enter email address"
-            />
-          </div>
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <button type="submit" className="btn btn-primary">
-              {editingId ? 'Update User' : 'Create User'}
-            </button>
-            {editingId && (
-              <button
-                type="button"
-                className="btn"
-                onClick={() => {
-                  setEditingId(null);
-                  setFormData({ name: '', email: '' });
-                }}
-              >
-                Cancel
-              </button>
-            )}
-          </div>
-        </form>
+      <div className="top-bar">
+        <h2 className="page-title">User Management</h2>
+        <button onClick={fetchUsers} className="btn-icon">
+          🔄
+        </button>
       </div>
 
-      <div className="panel">
-        <div className="panel-header">
-          <h2 className="panel-title">All Users ({users.length})</h2>
-          <button onClick={fetchUsers} className="btn btn-success">
-            Refresh
-          </button>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        <div className="form-panel" style={{ width: '100%' }}>
+          <h3 style={{ marginBottom: '24px', color: 'white' }}>
+            {editingId ? 'Edit User' : 'Create New User'}
+          </h3>
+
+          {error && <div className="status-badge status-unhealthy" style={{ marginBottom: '16px', width: '100%' }}>{error}</div>}
+          {success && <div className="status-badge status-healthy" style={{ marginBottom: '16px', width: '100%' }}>{success}</div>}
+
+          <form onSubmit={handleSubmit}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+              <div className="form-group">
+                <label>Full Name</label>
+                <input
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  required
+                  placeholder="e.g. John Doe"
+                />
+              </div>
+              <div className="form-group">
+                <label>Email Address</label>
+                <input
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  required
+                  placeholder="john@example.com"
+                />
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
+              <button type="submit" className="btn btn-primary" style={{ flex: 1 }}>
+                {editingId ? 'Update' : 'Create User'}
+              </button>
+              {editingId && (
+                <button
+                  type="button"
+                  className="btn"
+                  style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}
+                  onClick={() => {
+                    setEditingId(null);
+                    setFormData({ name: '', email: '' });
+                  }}
+                >
+                  Cancel
+                </button>
+              )}
+            </div>
+          </form>
         </div>
 
-        {loading ? (
-          <div className="loading">Loading users...</div>
-        ) : users.length === 0 ? (
-          <div className="loading">No users found. Create one!</div>
-        ) : (
-          <div className="item-list">
-            {users.map((user) => (
-              <div key={user.id} className="item">
-                <div className="item-header">
-                  <div className="item-title">{user.name}</div>
-                  <div style={{ display: 'flex', gap: '8px' }}>
-                    <button
-                      onClick={() => handleEdit(user)}
-                      className="btn btn-primary"
-                      style={{ padding: '4px 12px', fontSize: '12px' }}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(user.id)}
-                      className="btn btn-danger"
-                      style={{ padding: '4px 12px', fontSize: '12px' }}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-                <div className="item-details">
-                  <strong>Email:</strong> {user.email}
-                </div>
-                <div className="item-details">
-                  <strong>ID:</strong> {user.id}
-                </div>
-              </div>
-            ))}
+        <div className="panel" style={{ padding: '0', overflow: 'hidden', width: '100%' }}>
+          <div className="panel-header" style={{ padding: '24px', borderBottom: '1px solid var(--border-glass)' }}>
+            <h3 style={{ margin: 0 }}>Registered Users ({users.length})</h3>
           </div>
-        )}
+
+          {loading ? (
+            <div className="loading" style={{ padding: '40px', textAlign: 'center', color: 'var(--text-secondary)' }}>Loading users...</div>
+          ) : users.length === 0 ? (
+            <div className="loading" style={{ padding: '40px', textAlign: 'center', color: 'var(--text-secondary)' }}>No users found. Create one!</div>
+          ) : (
+            <div className="table-container">
+              <table style={{ width: '100%' }}>
+                <thead>
+                  <tr>
+                    <th style={{ width: '10%' }}>ID</th>
+                    <th style={{ width: '30%' }}>Name</th>
+                    <th style={{ width: '40%' }}>Email</th>
+                    <th style={{ textAlign: 'right', width: '20%' }}>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.map((user) => (
+                    <tr key={user.id}>
+                      <td style={{ fontFamily: 'monospace', color: 'var(--primary)' }}>#{user.id}</td>
+                      <td>
+                        <div style={{ fontWeight: '600', color: 'white' }}>{user.name}</div>
+                      </td>
+                      <td style={{ color: 'var(--text-secondary)' }}>{user.email}</td>
+                      <td style={{ textAlign: 'right' }}>
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+                          <button
+                            onClick={() => handleEdit(user)}
+                            className="btn"
+                            style={{ padding: '8px 16px', fontSize: '12px', background: 'rgba(255,255,255,0.05)', color: 'white' }}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDelete(user.id)}
+                            className="btn btn-danger"
+                            style={{ padding: '8px 16px', fontSize: '12px' }}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

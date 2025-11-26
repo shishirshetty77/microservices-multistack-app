@@ -12,3 +12,6 @@ data:
   PRODUCT_SERVICE_URL: "http://product-service:8002"
   ORDER_SERVICE_URL: "http://order-service:8003"
   NOTIFICATION_SERVICE_URL: "http://notification-service:8004"
+  DB_HOST: "postgres-service"
+  DB_PORT: "5432"
+  DB_NAME: "analytics_db"
